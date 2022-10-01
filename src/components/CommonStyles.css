@@ -10,4 +10,7 @@
     padding-top: 8px;
 }
 
-/*.c-*/
+.scroll-table {
+    max-height: 100vh;
+    overflow: auto;
+}

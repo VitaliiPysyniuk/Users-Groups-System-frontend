@@ -15,10 +15,16 @@ export const GroupAddComponent = () => {
         }
         const response = await groupsServices.addGroup(data);
 
+        console.log(response)
+
         if (response.status === 201) {
             setOptions({messageText: "Group successfully added.", type: "show custom-btn-success"});
         } else if (response.status === 400) {
-            setOptions({messageText: "Something went wrong.", type: "show custom-btn-danger"});
+            let message = ''
+            for (let item in response.data) {
+                message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]}`
+            }
+            setOptions({messageText: message, type: "show custom-btn-danger"});
         } else if (response.status === 500) {
             setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
         }
@@ -34,7 +40,7 @@ export const GroupAddComponent = () => {
             <div className="d-flex justify-content-end align-items-center">
                 {options && <NotificationComponent messageText={options.messageText} type={options.type}
                                                onNotificationClose={onNotificationClose}/>}
-                <button type="submit" className="btn btn-success my-2" form="editform">Save Group</button>
+                <button type="submit" className="btn btn-success my-2" form="addform">Save Group</button>
             </div>
             <hr className="my-0"/>
             <form id="addform" className="mt-3" onSubmit={saveChanges}>

@@ -18,7 +18,11 @@ export const GroupEditComponent = ({groupToEdit}) => {
         if (response.status === 200) {
             setOptions({messageText: "Group successfully edited.", type: "show custom-btn-success"});
         } else if (response.status === 400) {
-            setOptions({messageText: "Something went wrong.", type: "show custom-btn-danger"});
+            let message = ''
+            for (let item in response.data) {
+                message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]}`
+            }
+            setOptions({messageText: message, type: "show custom-btn-danger"});
         } else if (response.status === 500) {
             setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
         }
