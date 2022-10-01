@@ -40,11 +40,11 @@ export const GroupsComponent = ({onGroupEdit}) => {
         if (event.target.elements.name.value !== '') {
             params.name__startswith = event.target.elements.name.value;
         }
-        if (event.target.elements.members_number__gt.value !== '') {
-            params.members_number__gt = event.target.elements.members_number__gt.value;
+        if (event.target.elements.members_number__gte.value !== '') {
+            params.members_number__gte = event.target.elements.members_number__gte.value;
         }
-        if (event.target.elements.members_number__lt.value !== '') {
-            params.members_number__lt = event.target.elements.members_number__lt.value;
+        if (event.target.elements.members_number__lte.value !== '') {
+            params.members_number__lte = event.target.elements.members_number__lte.value;
         }
 
         if (JSON.stringify(params) !== JSON.stringify({with_members_number: 'True'})) {
@@ -87,15 +87,17 @@ export const GroupsComponent = ({onGroupEdit}) => {
                     <form id="filterform" className="mt-2 mb-2" onSubmit={onFiltersApply}>
                         <div className="d-flex flex-column mb-1">
                             <label className="fw-bold">Name:</label>
-                            <input type="text" className="form-control p-1" id="name"/>
+                            <input type="text" className="form-control p-1" id="name" placeholder={'Group 1'}/>
                         </div>
                         <div className="d-flex flex-column mt-3">
                             <label className="fw-bold">Members number: </label>
                             <div className="d-flex align-items-center">
                                 <label className="me-1">From: </label>
-                                <input type="text" className="form-control p-1" id="members_number__gt"/>
+                                <input type="text" className="form-control p-1" id="members_number__gte"
+                                       placeholder={'1'}/>
                                 <label className="ms-2 me-1">To: </label>
-                                <input type="text" className="form-control p-1" id="members_number__lt"/>
+                                <input type="text" className="form-control p-1" id="members_number__lte"
+                                       placeholder={'10'}/>
                             </div>
                         </div>
                     </form>

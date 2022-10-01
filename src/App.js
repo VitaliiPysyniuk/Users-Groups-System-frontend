@@ -34,7 +34,7 @@ function App() {
                 <Route path={'/users'} exact={true} element={<UsersComponent onUserEdit={onUserEdit}/>}/>
                 <Route path={'/users/add'} exact={true} element={<UserAddComponent/>}/>
                 <Route path={'/users/:id'} exact={true} element={<UserEditComponent userToEdit={userToEdit}/>}/>
-                <Route path='*' element={<Navigate to='/'/>}/>
+                <Route path='*' element={<Navigate to='/users'/>}/>
             </Routes>
         </div>
     )
