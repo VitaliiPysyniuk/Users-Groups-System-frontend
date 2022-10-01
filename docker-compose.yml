@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  ugs_frontend_app:
+    image: nginx:alpine
+    container_name: ugs_frontend_app
+    ports:
+      - "80:80"
+    volumes:
+      - ./build:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: on-failure
