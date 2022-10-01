@@ -1,0 +1,16 @@
+.w-85 {
+    width: 85% !important;
+}
+
+.w-23 {
+    width: 23% !important;
+}
+
+.c-pt-8 {
+    padding-top: 8px;
+}
+
+.scroll-table {
+    max-height: 100vh;
+    overflow: auto;
+}
