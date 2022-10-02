@@ -8,6 +8,7 @@ export const UserEditComponent = ({userToEdit}) => {
     const [options, setOptions] = useState(null);
     const [groups, setGroups] = useState(null);
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [formChanged, setFormChanged] = useState(false);
 
     const fetchGroups = async () => {
         const response = await groupsServices.getAllGroups();
@@ -40,21 +41,25 @@ export const UserEditComponent = ({userToEdit}) => {
             is_admin: event.target.elements.admin.checked,
             groups: selectedGroups.map(group => group.value)
         }
-        console.log(data.groups)
-        const response = await usersServices.editUser(userToEdit.id, data)
 
-        if (response.status === 200) {
-            setOptions({messageText: "User successfully edited.", type: "show custom-btn-success"});
-        } else if (response.status === 400) {
-            let message = ''
-            for (let item in response.data) {
-                message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]} `
+        if (formChanged) {
+            const response = await usersServices.editUser(userToEdit.id, data)
+
+            if (response.status === 200) {
+                setOptions({messageText: "User successfully edited.", type: "show custom-btn-success"});
+            } else if (response.status === 400) {
+                let message = ''
+                for (let item in response.data) {
+                    message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]} `
+                }
+                setOptions({messageText: message, type: "show custom-btn-danger"});
+            } else if (response.status === 500) {
+                setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
             }
-            setOptions({messageText: message, type: "show custom-btn-danger"});
-        } else if (response.status === 500) {
-            setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
+            setTimeout(() => setOptions(null), 2500);
+
+            setFormChanged(false)
         }
-        setTimeout(() => setOptions(null), 2500);
     }
 
     const onNotificationClose = () => {
@@ -73,7 +78,7 @@ export const UserEditComponent = ({userToEdit}) => {
                 <button type="submit" className="btn btn-success my-2" form="editform">Save User</button>
             </div>
             <hr className="my-0"/>
-            <form id="editform" className="mt-3" onSubmit={saveChanges}>
+            <form id="editform" className="mt-3" onSubmit={saveChanges} onChange={() => setFormChanged(true)}>
                 <div className="mb-3 row">
                     <label className="col-sm-2 col-form-label">Email</label>
                     <div className="col-sm-10">
@@ -98,7 +103,10 @@ export const UserEditComponent = ({userToEdit}) => {
                     <div className="col-sm-10">
                         {groups && <Select closeMenuOnSelect={true} isMulti={true} options={groups} id="groups"
                                            defaultValue={selectedGroups}
-                                           onChange={selected => setSelectedGroups(selected)}/>}
+                                           onChange={selected => {
+                                               setFormChanged(true)
+                                               setSelectedGroups(selected)
+                                           }}/>}
                     </div>
                 </div>
             </form>

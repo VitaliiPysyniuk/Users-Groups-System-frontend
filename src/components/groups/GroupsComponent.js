@@ -51,6 +51,9 @@ export const GroupsComponent = ({onGroupEdit}) => {
             const response = await groupsServices.getAllGroups(params);
             setGroups(response.data);
             setClearFilter(true)
+        } else {
+            fetchGroups()
+            setClearFilter(false)
         }
     }
 
