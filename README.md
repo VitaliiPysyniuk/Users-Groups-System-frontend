@@ -18,7 +18,6 @@ higher.
 <h3>Requirements</h3>
 <dl>
   <li>Node >= 16.17.1</li>
-  <li>npm >= 8.15.0</li>
 </dl>
 Before running the application on your machine in the Docker container you need to have docker and docker-compose installed. 
 The installation guide you can find <a href="https://docs.docker.com/desktop/">here</a>.
