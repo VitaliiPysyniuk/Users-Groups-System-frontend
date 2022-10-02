@@ -11,21 +11,23 @@ export const UserEditComponent = ({userToEdit}) => {
 
     const fetchGroups = async () => {
         const response = await groupsServices.getAllGroups();
-        setGroups(response.data.map(group => {
+        const groupsOptions = response.data.map(group => {
             return {value: group.id, label: group.name}
-        }));
-
+        });
+        setGroups(groupsOptions);
+        setSelectedGroups(selectDefaultGroups(groupsOptions))
     }
 
-    const selectDefaultGroups = () => {
+    const selectDefaultGroups = (groupsOptions) => {
         let defaultGroups = [];
         const belongToGroups = userToEdit.groups.map(group => group.id);
 
-        for (let group of groups) {
+        for (let group of groupsOptions) {
             if (belongToGroups.includes(group.value)) {
                 defaultGroups.push(group)
             }
         }
+
         return defaultGroups
     }
 
@@ -38,7 +40,7 @@ export const UserEditComponent = ({userToEdit}) => {
             is_admin: event.target.elements.admin.checked,
             groups: selectedGroups.map(group => group.value)
         }
-
+        console.log(data.groups)
         const response = await usersServices.editUser(userToEdit.id, data)
 
         if (response.status === 200) {
@@ -95,7 +97,7 @@ export const UserEditComponent = ({userToEdit}) => {
                     <label className="col-sm-2 col-form-label">Groups</label>
                     <div className="col-sm-10">
                         {groups && <Select closeMenuOnSelect={true} isMulti={true} options={groups} id="groups"
-                                           defaultValue={selectDefaultGroups()}
+                                           defaultValue={selectedGroups}
                                            onChange={selected => setSelectedGroups(selected)}/>}
                     </div>
                 </div>
