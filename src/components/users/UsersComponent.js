@@ -75,6 +75,9 @@ export const UsersComponent = ({onUserEdit}) => {
             const response = await usersServices.getAllUsers(params);
             setUsers(response.data);
             setClearFilter(true)
+        } else {
+            fetchUsers()
+            setClearFilter(false)
         }
     }
 

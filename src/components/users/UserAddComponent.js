@@ -7,6 +7,7 @@ export const UserAddComponent = () => {
     const [options, setOptions] = useState(null);
     const [groups, setGroups] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [formChanged, setFormChanged] = useState(false);
 
     const fetchGroups = async () => {
         const response = await groupsServices.getAllGroups();
@@ -26,19 +27,22 @@ export const UserAddComponent = () => {
         }
 
         const response = await usersServices.addUser(data)
-
-        if (response.status === 201) {
-            setOptions({messageText: "User successfully added.", type: "show custom-btn-success"});
-        } else if (response.status === 400) {
-            let message = ''
-            for (let item in response.data) {
-                message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]} `
+        if (formChanged) {
+            if (response.status === 201) {
+                setOptions({messageText: "User successfully added.", type: "show custom-btn-success"});
+            } else if (response.status === 400) {
+                let message = ''
+                for (let item in response.data) {
+                    message += `${item.charAt(0).toUpperCase()}${item.slice(1)}: ${response.data[item]} `
+                }
+                setOptions({messageText: message, type: "show custom-btn-danger"});
+            } else if (response.status === 500) {
+                setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
             }
-            setOptions({messageText: message, type: "show custom-btn-danger"});
-        } else if (response.status === 500) {
-            setOptions({messageText: "Server error.", type: "show custom-btn-warning"});
+            setTimeout(() => setOptions(null), 2500);
+
+            setFormChanged(false)
         }
-        setTimeout(() => setOptions(null), 2500);
     }
 
     const onNotificationClose = () => {
@@ -57,7 +61,7 @@ export const UserAddComponent = () => {
                 <button type="submit" className="btn btn-success my-2" form="addform">Save User</button>
             </div>
             <hr className="my-0"/>
-            <form id="addform" className="mt-3" onSubmit={saveChanges}>
+            <form id="addform" className="mt-3" onSubmit={saveChanges} onChange={() => setFormChanged(true)}>
                 <div className="mb-3 row">
                     <label className="col-sm-2 col-form-label">Email</label>
                     <div className="col-sm-10">
@@ -80,7 +84,10 @@ export const UserAddComponent = () => {
                     <label className="col-sm-2 col-form-label">Groups</label>
                     <div className="col-sm-10">
                         <Select closeMenuOnSelect={true} isMulti={true} options={groups} id="groups"
-                                onChange={selected => setSelectedGroups(selected)}/>
+                                onChange={selected => {
+                                    setSelectedGroups(selected)
+                                    setFormChanged(true)
+                                }}/>
                     </div>
                 </div>
             </form>
